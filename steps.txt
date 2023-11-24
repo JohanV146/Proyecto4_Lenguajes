@@ -1,0 +1,9 @@
+1. cd Documents\Proyecto3.
+
+2. node sever.js.
+
+3. abrir Acceso directo ngrok.
+
+4.  ngrok config add-authtoken 2YXv9AU3H32C6NmXydsrzd2Y4Px_7Nsc4AjNPfPdnKvE3Azkd
+
+5.  ngrok http 3000

@@ -1,0 +1,51 @@
+
+/* Agrega estos estilos en tu archivo CSS o en línea según prefieras */
+.create-game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  background-color: #4cba4b;
+}
+
+.form-container {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 15px 15px;
+  font-size: 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.countdown-container {
+  margin-top: 30px;
+}
+
+.countdown-timer {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.countdown-timer svg {
+  margin-right: 10px;
+}
+
+.small-button {
+  margin-right: 10px;
+}

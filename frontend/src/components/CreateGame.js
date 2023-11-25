@@ -22,7 +22,7 @@ const CreateGame = () => {
     const code = generateGameCode();
     const adjustedGameId = 10 * gameSettings.numPlayers;
     // Redirigir a la pantalla del juego con el código de la partida
-    navigate(`/game/${code}`);
+    navigate(`/game/${adjustedGameId}/${code}`);
   };
 
   const generateGameCode = () => {

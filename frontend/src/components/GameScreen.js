@@ -6,7 +6,7 @@ import './GameScreen.css';
 import Board from './Board';
 
 const GameScreen = () => {
-  const { gameCode } = useParams();
+  const { numPlayers, gameCode } = useParams();
   const [countdown, setCountdown] = useState(180);
   const [snakeColor, setSnakeColor] = useState('#ff0000');
   const [selectionLocked, setSelectionLocked] = useState(false);
@@ -45,7 +45,8 @@ const GameScreen = () => {
     localStorage.setItem('selectedColor', snakeColor);
 
     // Redirigir a la pantalla de juego
-    navigate(`/play/${gameCode}`);
+    console.log(snakeColor);
+    navigate(`/play/${gameCode}/${numPlayers}`);
   };
 
   return (

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import './Lobby.css'; // Importa el archivo de estilos
 import backgroundImage from '../images/snake_background.png';
 
-
 const Lobby = () => {
   const backgroundStyle = {
     backgroundImage: `url(${backgroundImage})`,

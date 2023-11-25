@@ -1,0 +1,39 @@
+/* src/components/GameScreen.css */
+.game-screen-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #4cba4b;
+}
+
+.game-content {
+  text-align: center;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.snake-container {
+  margin-bottom: 20px;
+}
+
+.color-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.color-option {
+  width: 30px;
+  height: 30px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

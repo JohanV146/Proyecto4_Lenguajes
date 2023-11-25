@@ -1,0 +1,25 @@
+/* src/components/Snake.css */
+.snake-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.snake-body {
+  width: 100px;
+  height: 100px;
+  border: 1px solid #000;
+  position: relative;
+  cursor: pointer;
+}
+
+.snake-body .snake-image {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-image: url('../images/snake.png'); /* Ruta de tu textura o imagen */
+}
+
+.snake-container.selected .snake-body {
+  cursor: not-allowed;
+}

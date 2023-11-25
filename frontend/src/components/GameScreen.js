@@ -8,9 +8,9 @@ import Board from './Board';
 const GameScreen = () => {
   const { numPlayers, gameCode } = useParams();
   const [countdown, setCountdown] = useState(180);
-  const [snakeColor, setSnakeColor] = useState('#ff0000');
+  const [snakeColor, setSnakeColor] = useState('#572364');
   const [selectionLocked, setSelectionLocked] = useState(false);
-  const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#a52a2a'];
+  const colors = ['#572364', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#a52a2a'];
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,14 +40,15 @@ const GameScreen = () => {
   const handleSelectClick = () => {
     // Aquí puedes realizar alguna lógica adicional antes de redirigir
     console.log('Color seleccionado:', snakeColor);
-    
-    // Puedes almacenar el color en el estado o en un contexto para pasarlo a PlayGame.js
-    localStorage.setItem('selectedColor', snakeColor);
+
+    // Elimina el carácter "#" antes de almacenar el color en el estado o en localStorage
+    const cleanedColor = snakeColor.slice(1);
+    localStorage.setItem('selectedColor', cleanedColor);
 
     // Redirigir a la pantalla de juego
-    console.log(snakeColor);
-    navigate(`/play/${gameCode}/${numPlayers}`);
+    navigate(`/play/${gameCode}/${numPlayers}/${cleanedColor}`);
   };
+
 
   return (
     <div className="game-screen-container">

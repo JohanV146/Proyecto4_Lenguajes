@@ -5,7 +5,7 @@ import {io} from 'socket.io-client';
 const socket = io('http://localhost:3005');
 
 
-const Board = ({ gameId }) => {
+const Board = ({ gameId, snakeColor }) => {
     const [isConnected, setIsConnected] = useState(false);
     const [matrix, setMatrix] = useState([]);
     //Cambiar la orientacion de la serpiente.
@@ -27,7 +27,7 @@ const Board = ({ gameId }) => {
           for (let i = 0; i < data.length; i++) {
             for (let j = 0; j < data[i].length; j++) {
               if (data[i][j] !== 0) {
-                changeCellColor(i,j, 'blue');
+                changeCellColor(i,j, '#' + snakeColor);
               } else {
                 if(food_.y === i && food_.x === j) {
 
@@ -173,35 +173,40 @@ const Board = ({ gameId }) => {
         //si comio
         if (head.x === food_i.x && head.y === food_i.y) {
             setTail((prevTail) => [...prevTail, ...Array(1).fill({ x: tail[tail.length - 1].x, y: tail[tail.length - 1].y })]);
-            food_i.y = randomInt(1, 20);
-            food_i.x = randomInt(1, 20);
+            food_i.y = randomInt(1, gameId - 1);
+            food_i.x = randomInt(1, gameId - 1);
             setFood([food_i, ...food.slice(0, food.length - 1)]);
         }
 
         //Colision con las pardes.
         if (head.x < 0 || head.x >= gameId || head.y < 0 || head.y >= gameId) {
             // ...
-            console.log('perdió.')
-            return;
+            head.y = randomInt(5, gameId - 5);
+            head.x = randomInt(5, gameId - 5);
+            setTail([]);
         }
 
         //colision consigo mismo.
         tail.forEach((tailElement, index) => {
             //console.log(tailElement, " === ", head);
-            if(head.y === tailElement.y && head.x === tailElement.x && index !== 0) {console.log("perdio")}
+            if(head.y === tailElement.y && head.x === tailElement.x && index !== 0) {
+              head.y = randomInt(5, gameId - 5);
+              head.x = randomInt(5, gameId - 5);
+              setTail([]);
+            }
         });
 
         setSnake([head, ...snake.slice(0, snake.length - 1)]);
         //cambiamos el color de la siguiente casilla.
 
-        changeCellColor(head.y, head.x, 'blue');
+        changeCellColor(head.y, head.x, '#' + snakeColor);
 
         //cambiamos el color de la casilla anterior.
         if (tail.length > 0) {
             const last_tail = tail[tail_.length - 1];
 
             tail.forEach((tailElement, index) => {
-                changeCellColor(tailElement.y, tailElement.x, '#blue');
+                changeCellColor(tailElement.y, tailElement.x, '#' + snakeColor);
             });
 
 

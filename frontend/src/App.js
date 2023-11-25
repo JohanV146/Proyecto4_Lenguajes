@@ -13,7 +13,7 @@ const App = () => {
         <Route path="/" element={<Lobby />} />
         <Route path="/create" element={<CreateGame />} />
         <Route path="/game/:numPlayers/:gameCode" element={<GameScreen />} />
-        <Route path="/play/:code/:numPlayers" element={<PlayGame />} /> {/* Nueva ruta para jugar */}
+        <Route path="/play/:code/:numPlayers/:snakeColor" element={<PlayGame />} /> {/* Nueva ruta para jugar */}
       </Routes>
     </Router>
   );

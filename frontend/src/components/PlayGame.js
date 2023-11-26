@@ -15,7 +15,7 @@ const PlayGame = () => {
     <div className="play-game-container">
       <div className="info-container">
         <h1>Game Code: {code}</h1>
-        <h2>Number of Players: {numPlayers}</h2>
+        <h2>Number of Players: {numPlayers/10}</h2>
         <h2>Username: {username}</h2>
       </div>
       <div className="board-container">

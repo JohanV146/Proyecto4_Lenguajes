@@ -23,8 +23,8 @@ const App = () => {
           element={<Lobby authenticated={authenticated} username={username} onAuthenticate={handleAuthenticate} />}
         />
         <Route path="/create/:username" element={<CreateGame />} />
-        <Route path="/game/:numPlayers/:gameCode/:username" element={<GameScreen />} />
-        <Route path="/play/:code/:numPlayers/:snakeColor/:username" element={<PlayGame />} />
+        <Route path="/game/:numPlayers/:gameCode/:username/:tipo/:tipo2" element={<GameScreen />} />
+        <Route path="/play/:code/:numPlayers/:snakeColor/:username/:tipo/:tipo2" element={<PlayGame />} />
       </Routes>
     </Router>
   );

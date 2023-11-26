@@ -9,7 +9,7 @@ import {io} from 'socket.io-client';
 const socket = io('https://apollo-thu-yourself-folks.trycloudflare.com');
 
 
-const Board = ({ gameId, snakeColor }) => {
+const Board = ({ gameId, snakeColor, username }) => {
     const [isConnected, setIsConnected] = useState(false);
     const [matrix, setMatrix] = useState([]);
     //Cambiar la orientacion de la serpiente.
@@ -238,7 +238,6 @@ const Board = ({ gameId, snakeColor }) => {
 
     return (
       <div>
-        <h2>Snake game </h2>
         <div className="matrix-container">
           {matrix.map((row, rowIndex) => (
             <div key={rowIndex} className="matrix-row">

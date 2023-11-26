@@ -1,0 +1,14 @@
+/* Estilos.css (o tu archivo de estilos preferido) */
+.custom-button {
+  background-color: #4caf50; /* Color de fondo */
+  color: white; /* Color del texto */
+  padding: 10px 15px; /* Espaciado interno */
+  font-size: 16px; /* Tamaño de fuente */
+  border: none; /* Sin borde */
+  cursor: pointer; /* Cursor al pasar sobre el botón */
+  border-radius: 5px; /* Bordes redondeados */
+}
+
+.custom-button:hover {
+  background-color: #45a049; /* Cambia el color de fondo al pasar el ratón sobre el botón */
+}

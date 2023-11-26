@@ -1,10 +1,11 @@
 // src/components/CreateGame.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams  } from 'react-router-dom';
 import './CreateGame.css';
 
 const CreateGame = () => {
   const navigate = useNavigate();
+  const { username } = useParams();
   const [gameSettings, setGameSettings] = useState({
     gameType: 'Tiempo',
     theme: 'standard',
@@ -21,8 +22,7 @@ const CreateGame = () => {
   const handleCreateGame = () => {
     const code = generateGameCode();
     const adjustedGameId = 10 * gameSettings.numPlayers;
-    // Redirigir a la pantalla del juego con el código de la partida
-    navigate(`/game/${adjustedGameId}/${code}`);
+    navigate(`/game/${adjustedGameId}/${code}/${username}`);
   };
 
   const generateGameCode = () => {
@@ -33,6 +33,7 @@ const CreateGame = () => {
     <div className="create-game-container">
       <div className="centered-container">
         <h1>Crea tu Partida</h1>
+        <p>Hola, {username}! Personaliza tu partida a continuacion:</p>
         <div className="form-container">
           <div className="form-group">
             <label>Tipo de Juego:</label>
@@ -89,7 +90,7 @@ const CreateGame = () => {
           <button className="primary-button" onClick={handleCreateGame}>
             Crear Partida
           </button>
-          <button className="secondary-button" onClick={() => navigate('/')}>
+          <button className="secondary-button" onClick={() => navigate(`/`)}>
             Volver
           </button>
         </div>

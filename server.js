@@ -17,7 +17,7 @@ matrix = [];
 players = [];
 
 io.on('connection', (socket) => {
-    console.log('se ha conectado un cliente');
+    //console.log('se ha conectado un cliente');
     //subscripcion para recibir los datos de los clientes.
 
     socket.on('message', (data) => {
@@ -58,7 +58,7 @@ io.on('connection', (socket) => {
         //imprimirMatriz(newMatrix); 
         //         
         flag = soloMatrixToMultiplayer(newMatrix, snakeColor_);
-        if (flag == -1) {console.log("El jugador:", snakeColor_, " perdio");}
+        //if (flag == -1) {console.log("El jugador:", snakeColor_, " perdio");}
 
         //imprimirMatriz(matrix); 
         //Aqui reenviamos todos los datos ingresados a los demas clientes.

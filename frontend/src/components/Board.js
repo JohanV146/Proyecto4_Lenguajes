@@ -6,10 +6,13 @@ import {io} from 'socket.io-client';
 //https://2579-201-197-80-5.ngrok-free.app/
 //http://localhost:3005
 
-const socket = io('http://localhost:3005');
+const socket = io('https://reveals-combat-portable-republic.trycloudflare.com');
 
 
 const Board = ({ gameId, snakeColor, username, code, numPlayers }) => {
+
+    const [players, setPlayers] = useState([]);
+
     const [isConnected, setIsConnected] = useState(false);
     const [matrix, setMatrix] = useState([]);
     //Cambiar la orientacion de la serpiente.
@@ -29,9 +32,9 @@ const Board = ({ gameId, snakeColor, username, code, numPlayers }) => {
       const head = { ...snake[0] };
       socket.on('connect', () => setIsConnected(true));
       socket.on('message', (data) => {
-          const players_ = data.players
-          //console.log(players_);
-          
+          const players_ = data.players;
+          setPlayers(players_);
+          console.log(players_);
 
           const matrix_ = data.matrix
           //Si colisiona con otros jugadores.
@@ -124,26 +127,23 @@ const Board = ({ gameId, snakeColor, username, code, numPlayers }) => {
         });
     };
 
-
-
-    //Este se utiliza para cambiar la orientacion de la serpiente.
     const handleKeyPress = (event) => {
-        switch (event.key) {
-            case 'ArrowUp':
-              setDirection('UP');
-              break;
-            case 'ArrowDown':
-              setDirection('DOWN');
-              break;
-            case 'ArrowLeft':
-              setDirection('LEFT');
-              break;
-            case 'ArrowRight':
-              setDirection('RIGHT');
-              break;
-            default:
-              break;
-          }
+      switch (event.key) {
+        case 'ArrowUp':
+          setDirection((prevDirection) => (prevDirection !== 'DOWN' ? 'UP' : prevDirection));
+          break;
+        case 'ArrowDown':
+          setDirection((prevDirection) => (prevDirection !== 'UP' ? 'DOWN' : prevDirection));
+          break;
+        case 'ArrowLeft':
+          setDirection((prevDirection) => (prevDirection !== 'RIGHT' ? 'LEFT' : prevDirection));
+          break;
+        case 'ArrowRight':
+          setDirection((prevDirection) => (prevDirection !== 'LEFT' ? 'RIGHT' : prevDirection));
+          break;
+        default:
+          break;
+      }
     };
 
     useEffect(() => {
@@ -175,8 +175,6 @@ const Board = ({ gameId, snakeColor, username, code, numPlayers }) => {
 
         //inicial apple
         changeCellColor(food_i.y, food_i.x, 'red');
-
-
 
         switch (direction) {
           case 'UP':
@@ -222,26 +220,6 @@ const Board = ({ gameId, snakeColor, username, code, numPlayers }) => {
         });
 
         setSnake([head, ...snake.slice(0, snake.length - 1)]);
-        //cambiamos el color de la siguiente casilla.
-        /*
-        changeCellColor(head.y, head.x, '#' + snakeColor);
-
-        //cambiamos el color de la casilla anterior.
-        if (tail.length > 0) {
-            const last_tail = tail[tail_.length - 1];
-
-            tail.forEach((tailElement, index) => {
-                changeCellColor(tailElement.y, tailElement.x, '#' + snakeColor);
-            });
-
-
-            if((last_tail.x + last_tail.y) % 2 === 0) {
-                changeCellColor(last_tail.y, last_tail.x, '#acd44f');
-            } else {
-                changeCellColor(last_tail.y, last_tail.x, '#7ea109');
-            }
-        }
-        */
         sendMatrix(head, tail);
     }, [snake, direction, gameId]);
 
@@ -257,13 +235,11 @@ const Board = ({ gameId, snakeColor, username, code, numPlayers }) => {
           <h1>Codigo de partida: {code}</h1>
           <h2>Jugadores: {numPlayers / 10}</h2>
           <h2>Username: {username}</h2>
-          <h2></h2>
-          <h2></h2>
-          <h2></h2>
-          <h2></h2>
-          <h2></h2>
-          <h2></h2>
-          <h2></h2>
+          {players.map((player, index) => (
+            <h2 key={index} style={{ backgroundColor: `#${player[1]}`, color: 'white' }}>
+            {player[0]} puntaje: {player[2]}
+            </h2>
+          ))}
           {flagActivated ? (
             <p></p>
           ) : (

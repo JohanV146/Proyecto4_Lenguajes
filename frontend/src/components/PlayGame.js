@@ -20,7 +20,7 @@ const PlayGame = () => {
           username={username}
           code={code}
           numPlayers={numPlayers}
-          username={username}
+          
         />
       </div>
     </div>

@@ -1,5 +1,5 @@
-// src/App.js
-import React from 'react';
+// App.js
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Lobby from './components/Lobby';
 import CreateGame from './components/CreateGame';
@@ -7,13 +7,24 @@ import GameScreen from './components/GameScreen';
 import PlayGame from './components/PlayGame';
 
 const App = () => {
+  const [authenticated, setAuthenticated] = useState(false);
+  const [username, setUsername] = useState('');
+
+  const handleAuthenticate = (name) => {
+    setAuthenticated(true);
+    setUsername(name);
+  };
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Lobby />} />
-        <Route path="/create" element={<CreateGame />} />
-        <Route path="/game/:numPlayers/:gameCode" element={<GameScreen />} />
-        <Route path="/play/:code/:numPlayers/:snakeColor" element={<PlayGame />} /> {/* Nueva ruta para jugar */}
+        <Route
+          path="/"
+          element={<Lobby authenticated={authenticated} username={username} onAuthenticate={handleAuthenticate} />}
+        />
+        <Route path="/create/:username" element={<CreateGame />} />
+        <Route path="/game/:numPlayers/:gameCode/:username" element={<GameScreen />} />
+        <Route path="/play/:code/:numPlayers/:snakeColor/:username" element={<PlayGame />} />
       </Routes>
     </Router>
   );

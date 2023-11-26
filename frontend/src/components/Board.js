@@ -6,7 +6,7 @@ import {io} from 'socket.io-client';
 //https://2579-201-197-80-5.ngrok-free.app/
 //http://localhost:3005
 
-const socket = io('https://apollo-thu-yourself-folks.trycloudflare.com');
+const socket = io('https://dead-jessica-r-cpu.trycloudflare.com');
 
 
 const Board = ({ gameId, snakeColor, username }) => {
@@ -27,6 +27,10 @@ const Board = ({ gameId, snakeColor, username }) => {
       const head = { ...snake[0] };
       socket.on('connect', () => setIsConnected(true));
       socket.on('message', (data) => {
+          const players_ = data.players
+          //console.log(players_);
+          
+
           const matrix_ = data.matrix
           //Si colisiona con otros jugadores.
           if (data.user === socket.id && data.flag === -1) {
@@ -42,7 +46,9 @@ const Board = ({ gameId, snakeColor, username }) => {
           for (let i = 0; i < matrix_.length; i++) {
             for (let j = 0; j < matrix_[i].length; j++) {
               if (matrix_[i][j] !== 0) {
-                changeCellColor(i,j, '#' + snakeColor);
+
+                  changeCellColor(i,j, '#' + matrix_[i][j]);
+                //changeCellColor(i,j, '#' + snakeColor);
               } else {
                 if(food_.y === i && food_.x === j) {
 
@@ -72,7 +78,8 @@ const Board = ({ gameId, snakeColor, username }) => {
           usuario: socket.id,
           head_: head,
           tail_: tail,
-          snakeColor
+          snakeColor_ : snakeColor,
+          username_ : username
       });
     }
 
@@ -147,7 +154,7 @@ const Board = ({ gameId, snakeColor, username }) => {
 
 
     useEffect(() => {
-        const gameInterval = setInterval(moveSnake, 300);
+        const gameInterval = setInterval(moveSnake, 150);
 
         return () => {
           clearInterval(gameInterval);
@@ -214,7 +221,7 @@ const Board = ({ gameId, snakeColor, username }) => {
 
         setSnake([head, ...snake.slice(0, snake.length - 1)]);
         //cambiamos el color de la siguiente casilla.
-
+        /*
         changeCellColor(head.y, head.x, '#' + snakeColor);
 
         //cambiamos el color de la casilla anterior.
@@ -232,6 +239,7 @@ const Board = ({ gameId, snakeColor, username }) => {
                 changeCellColor(last_tail.y, last_tail.x, '#7ea109');
             }
         }
+        */
         sendMatrix(head, tail);
     }, [snake, direction, gameId]);
 

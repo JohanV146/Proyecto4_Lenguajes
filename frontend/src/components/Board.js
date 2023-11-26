@@ -2,7 +2,11 @@ import React, { useEffect, useState, useCallback } from 'react';
 import './Board.css';
 import { randomInt } from './utils';
 import {io} from 'socket.io-client';
-const socket = io('http://localhost:3005');
+
+//https://2579-201-197-80-5.ngrok-free.app/
+//http://localhost:3005
+
+const socket = io('https://apollo-thu-yourself-folks.trycloudflare.com');
 
 
 const Board = ({ gameId, snakeColor }) => {
@@ -20,13 +24,24 @@ const Board = ({ gameId, snakeColor }) => {
 
     //Conexcion de los sockets
     useEffect(() => {
+      const head = { ...snake[0] };
       socket.on('connect', () => setIsConnected(true));
       socket.on('message', (data) => {
+          const matrix_ = data.matrix
+          //Si colisiona con otros jugadores.
+          if (data.user === socket.id && data.flag === -1) {
+            head.y = randomInt(5, gameId - 5);
+            head.x = randomInt(5, gameId - 5);
+            setTail([]);
+            setSnake([head, ...snake.slice(0, snake.length - 1)]);
+            sendMatrix(head, tail);
+            return;
+          }
           const food_ = { ...food[0] };
           //Aqui recibimos la matrix.
-          for (let i = 0; i < data.length; i++) {
-            for (let j = 0; j < data[i].length; j++) {
-              if (data[i][j] !== 0) {
+          for (let i = 0; i < matrix_.length; i++) {
+            for (let j = 0; j < matrix_[i].length; j++) {
+              if (matrix_[i][j] !== 0) {
                 changeCellColor(i,j, '#' + snakeColor);
               } else {
                 if(food_.y === i && food_.x === j) {
@@ -57,6 +72,7 @@ const Board = ({ gameId, snakeColor }) => {
           usuario: socket.id,
           head_: head,
           tail_: tail,
+          snakeColor
       });
     }
 
@@ -131,7 +147,7 @@ const Board = ({ gameId, snakeColor }) => {
 
 
     useEffect(() => {
-        const gameInterval = setInterval(moveSnake, 200);
+        const gameInterval = setInterval(moveSnake, 300);
 
         return () => {
           clearInterval(gameInterval);

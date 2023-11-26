@@ -1,7 +1,13 @@
 const http = require('http');
-const PORT = 3005;
+const PORT = process.env.PORT || 3005;
 
-const server = http.createServer();
+const server = http.createServer((req, res) => {
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.end('Hello World!');
+});
+
+
+
 const io =  require('socket.io')(server, {
     cors: { origin: '*' }
 });
@@ -32,9 +38,14 @@ io.on('connection', (socket) => {
         flag = soloMatrixToMultiplayer(newMatrix, usuario);
         if (flag == -1) {console.log("El jugador:", usuario, " perdio");}
 
-        imprimirMatriz(matrix); 
+        //imprimirMatriz(matrix); 
         //Aqui reenviamos todos los datos ingresados a los demas clientes.
-        io.emit('message', matrix);
+        io.emit('message',  {
+          matrix: matrix,
+          flag: flag,
+          user: usuario
+        });
+        
     });
     
     //recibir el taamaño de la matriz.
@@ -64,7 +75,6 @@ function imprimirMatriz(matriz) {
       for (let j = 0; j < matriz[i].length; j++) {
         process.stdout.write(matriz[i][j] + '\t');
       }
-      console.log(); // Nueva línea después de cada fila
     }
   }
 
@@ -103,4 +113,6 @@ function deleteSnake(usuario) {
 
 
   
-server.listen(PORT);
+server.listen(PORT, () => {
+    console.log(`Servidor escuchando en el puerto ${PORT}`);
+});

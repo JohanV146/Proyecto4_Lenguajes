@@ -2,17 +2,19 @@ import React, { useEffect, useState, useCallback } from 'react';
 import './Board.css';
 import { randomInt } from './utils';
 import {io} from 'socket.io-client';
+import Modal from './Modal'; 
 
 //https://2579-201-197-80-5.ngrok-free.app/
 //http://localhost:3005
 
-const socket = io('https://reveals-combat-portable-republic.trycloudflare.com');
+const socket = io('https://unsubscribe-ken-logs-delivered.trycloudflare.com');
 
 
-const Board = ({ gameId, snakeColor, username, code, numPlayers }) => {
+const Board = ({ gameId, snakeColor, username, code, numPlayers, tipo, tipo2 }) => {
+    const [gameOver, setGameOver] = useState(false);
+    const [winner, setWinner] = useState('');
 
     const [players, setPlayers] = useState([]);
-
     const [isConnected, setIsConnected] = useState(false);
     const [matrix, setMatrix] = useState([]);
     //Cambiar la orientacion de la serpiente.
@@ -32,9 +34,14 @@ const Board = ({ gameId, snakeColor, username, code, numPlayers }) => {
       const head = { ...snake[0] };
       socket.on('connect', () => setIsConnected(true));
       socket.on('message', (data) => {
+
+          if(data.juegoFinalizado) {
+            console.log("Finalizado. el ganador es: ", data.winner);
+            handleGameOver(data.winner);
+          }
           const players_ = data.players;
           setPlayers(players_);
-          console.log(players_);
+          
 
           const matrix_ = data.matrix
           //Si colisiona con otros jugadores.
@@ -67,7 +74,6 @@ const Board = ({ gameId, snakeColor, username, code, numPlayers }) => {
               }
             }
           }
-          //console.log(data);
       });
       socket.on('matrix', (data) => {});
     //Cerramos las peticiones.
@@ -84,7 +90,9 @@ const Board = ({ gameId, snakeColor, username, code, numPlayers }) => {
           head_: head,
           tail_: tail,
           snakeColor_ : snakeColor,
-          username_ : username
+          username_ : username,
+          tipoP: tipo,
+          size: tipo2
       });
     }
 
@@ -211,7 +219,7 @@ const Board = ({ gameId, snakeColor, username, code, numPlayers }) => {
 
         //colision consigo mismo.
         tail.forEach((tailElement, index) => {
-            //console.log(tailElement, " === ", head);
+
             if(head.y === tailElement.y && head.x === tailElement.x && index !== 0) {
               head.y = randomInt(5, gameId - 5);
               head.x = randomInt(5, gameId - 5);
@@ -228,6 +236,11 @@ const Board = ({ gameId, snakeColor, username, code, numPlayers }) => {
        setFlagActivated(true);
      };
 
+     const handleGameOver = (playerName) => {
+      setGameOver(true);
+      setWinner(playerName);
+    };
+  
 
     return (
       <div className="board-container">

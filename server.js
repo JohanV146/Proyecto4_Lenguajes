@@ -17,57 +17,71 @@ matrix = [];
 players = [];
 
 io.on('connection', (socket) => {
-    //console.log('se ha conectado un cliente');
     //subscripcion para recibir los datos de los clientes.
-
     socket.on('message', (data) => {
-        //console.log(players);
-
+        //time or size
+        tipoP = data.tipoP;
+        score = data.size;
+        //datos genericos.
         usuario = data.usuario;
         head = data.head_;
         tail = data.tail_;
         //
         snakeColor_= data.snakeColor_;
         username_ = data.username_;
-        //puntajes, colores y nombre.
-        flagExisteJugador = 1;
+        //max puntaje
+        maxScore = verificarEstado(score);
 
-        players.forEach((gameUser, index) => {
-          //si el jugador existe no se agrega.
-          if (gameUser[0] == username_) {flagExisteJugador = 0;}
-        });
+        //aqui validamos si la partida sigue en pie.
+        if ((tipoP == 0 && score == 0) ||  (maxScore ==-1 && tipoP == 1)) { 
+          io.emit('message',  {
+            matrix: matrix,
+            flag: flag,
+            user: usuario,
+            players: players,
+            juegoFinalizado: true,
+            winner: username_
 
-        if(flagExisteJugador == 1) {
-          players.push([username_, snakeColor_, 1, usuario]);
+          });
+        } else { 
+          //puntajes, colores y nombre.
+          flagExisteJugador = 1;
+
+          players.forEach((gameUser, index) => {
+            //si el jugador existe no se agrega.
+            if (gameUser[0] == username_) {flagExisteJugador = 0;}
+          });
+
+          if(flagExisteJugador == 1) {
+            players.push([username_, snakeColor_, 1, usuario]);
+          }
+
+          //actualizamos el puntaje del jugador:
+          players.forEach((gameUser) => {
+            //si el jugador existe no se agrega.
+            if (gameUser[0] == username_) {gameUser[2] = tail.length;}
+          });
+
+          newMatrix = crearMatriz(size);
+          newMatrix[head.y][head.x] = snakeColor_;
+          //dibujamos la serpiente en la matriz local.
+          tail.forEach((tailElement, index) => {
+              if (index != tail.length - 1) {
+                newMatrix[tailElement.y][tailElement.x] = 'x';
+              }
+          });
+          //         
+          flag = soloMatrixToMultiplayer(newMatrix, snakeColor_);
+          //enviamos la repsuesta con los datos actualizados.
+          io.emit('message',  {
+            matrix: matrix,
+            flag: flag,
+            user: usuario,
+            players: players,
+            juegoFinalizado: false,
+            winner: ''
+          });
         }
-
-        //actualizamos el puntaje del jugador:
-        players.forEach((gameUser) => {
-          //si el jugador existe no se agrega.
-          if (gameUser[0] == username_) {gameUser[2] = tail.length;}
-        });
-
-        newMatrix = crearMatriz(size);
-        newMatrix[head.y][head.x] = snakeColor_;
-        tail.forEach((tailElement, index) => {
-            //console.log(tailElement, " === ", head);
-            if (index != tail.length - 1) {
-              newMatrix[tailElement.y][tailElement.x] = 'x';
-            }
-        });
-        //imprimirMatriz(newMatrix); 
-        //         
-        flag = soloMatrixToMultiplayer(newMatrix, snakeColor_);
-        //if (flag == -1) {console.log("El jugador:", snakeColor_, " perdio");}
-
-        //imprimirMatriz(matrix); 
-        //Aqui reenviamos todos los datos ingresados a los demas clientes.
-        io.emit('message',  {
-          matrix: matrix,
-          flag: flag,
-          user: usuario,
-          players: players
-        });
         
     });
     
@@ -134,6 +148,14 @@ function deleteSnake(usuario) {
   }
 }
 
+function verificarEstado(n) {
+  for (let i = 0; i < players.length; i++) {
+    if (players[i][2] == n) {
+      return -1;
+    }
+  }
+  return 0;
+}
 
   
 server.listen(PORT, () => {

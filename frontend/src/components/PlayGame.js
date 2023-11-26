@@ -22,7 +22,6 @@ const PlayGame = () => {
           username={username}
           code={code}
           numPlayers={numPlayers}
-          username={username}
           tipo={tipo}
           tipo2={tipo2}
         />

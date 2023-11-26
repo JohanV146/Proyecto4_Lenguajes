@@ -5,11 +5,13 @@ import Board from './Board';
 import './PlayGame.css'; // Importa el archivo de estilos
 
 const PlayGame = () => {
-  const { code, numPlayers, snakeColor, username } = useParams();
+  const { code, numPlayers, snakeColor, username, tipo, tipo2 } = useParams();
 
   useEffect(() => {
     // Lógica adicional según sea necesario
   }, [code]);
+
+  console.log(tipo, tipo2);
 
   return (
     <div className="play-game-container">
@@ -20,7 +22,9 @@ const PlayGame = () => {
           username={username}
           code={code}
           numPlayers={numPlayers}
-          
+          username={username}
+          tipo={tipo}
+          tipo2={tipo2}
         />
       </div>
     </div>

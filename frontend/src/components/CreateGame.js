@@ -19,10 +19,33 @@ const CreateGame = () => {
     setGameSettings((prevSettings) => ({ ...prevSettings, [name]: value }));
   };
 
+  const getGameInfo = (gameSettings) => {
+    let tipo = 0;
+    let tipo2 = 0;
+    if (gameSettings.gameType === 'Tiempo') {
+      tipo = 0;
+      tipo2 = gameSettings.duration;
+    } else if (gameSettings.gameType === 'Largo') {
+      tipo = 1;
+      tipo2 = gameSettings.snakeLength;
+    } else {
+      return null;
+    }
+
+    return { tipo, tipo2 };
+  };
+
+
   const handleCreateGame = () => {
     const code = generateGameCode();
     const adjustedGameId = 10 * gameSettings.numPlayers;
-    navigate(`/game/${adjustedGameId}/${code}/${username}`);
+    const gameInfo = getGameInfo(gameSettings);
+    if (gameInfo) {
+      const { tipo, tipo2 } = gameInfo;
+      navigate(`/game/${adjustedGameId}/${code}/${username}/${tipo}/${tipo2}`);
+    } else {
+      console.error('Tipo de juego no reconocido');
+    }
   };
 
   const generateGameCode = () => {

@@ -6,10 +6,10 @@ import {io} from 'socket.io-client';
 //https://2579-201-197-80-5.ngrok-free.app/
 //http://localhost:3005
 
-const socket = io('https://dead-jessica-r-cpu.trycloudflare.com');
+const socket = io('http://localhost:3005');
 
 
-const Board = ({ gameId, snakeColor, username }) => {
+const Board = ({ gameId, snakeColor, username, code, numPlayers }) => {
     const [isConnected, setIsConnected] = useState(false);
     const [matrix, setMatrix] = useState([]);
     //Cambiar la orientacion de la serpiente.
@@ -21,6 +21,8 @@ const Board = ({ gameId, snakeColor, username }) => {
 
     //cola de la serpiente.
     const [tail, setTail] = useState([]);
+
+    const [flagActivated, setFlagActivated] = useState(false);
 
     //Conexcion de los sockets
     useEffect(() => {
@@ -244,17 +246,39 @@ const Board = ({ gameId, snakeColor, username }) => {
     }, [snake, direction, gameId]);
 
 
+     const handleStartClick = () => {
+       setFlagActivated(true);
+     };
+
+
     return (
-      <div>
+      <div className="board-container">
+        <div className="info-container">
+          <h1>Codigo de partida: {code}</h1>
+          <h2>Jugadores: {numPlayers / 10}</h2>
+          <h2>Username: {username}</h2>
+          <h2></h2>
+          <h2></h2>
+          <h2></h2>
+          <h2></h2>
+          <h2></h2>
+          <h2></h2>
+          <h2></h2>
+          {flagActivated ? (
+            <p></p>
+          ) : (
+            <button onClick={handleStartClick}>Iniciar</button>
+          )}
+        </div>
         <div className="matrix-container">
           {matrix.map((row, rowIndex) => (
             <div key={rowIndex} className="matrix-row">
               {row.map((cell, colIndex) => (
-                <div key={colIndex} 
-                className="matrix-cell" 
-                style={{ backgroundColor: cell.color }}
+                <div
+                  key={colIndex}
+                  className="matrix-cell"
+                  style={{ backgroundColor: cell.color }}
                 >
-                  {/* Puedes personalizar el contenido de la casilla aquí si es necesario */}
                 </div>
               ))}
             </div>

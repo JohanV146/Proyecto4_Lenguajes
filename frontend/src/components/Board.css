@@ -1,19 +1,50 @@
+/* Board.css */
+.board-container {
+  display: flex;
+  height: 100vh; /* Ajusta la altura al 100% del viewport */
+  overflow: hidden; /* Evita el scroll en el contenedor principal */
+}
+
+.info-container {
+  padding: 20px;
+  background-color: #f0f0f0;
+  width: 200px; /* Ajusta el ancho según tus preferencias */
+}
+
+button {
+  margin-top: 10px; /* Ajusta el margen superior según tus necesidades */
+  padding: 10px 20px; /* Ajusta el padding según tus preferencias */
+  background-color: #4CAF50; /* Verde */
+  color: #fff; /* Letras blancas */
+  border: none;
+  border-radius: 5px; /* Ajusta el radio de la esquina para que sea redondeado */
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049; /* Cambia el color al pasar el mouse */
+}
+
 .matrix-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .matrix-row {
-    display: flex;
-  }
-  
-  .matrix-cell {
-    width: 30px;
-    height: 30px;
-    border: 1px solid #7ea109;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0px;
-  }
+  flex: 1;
+  background-color: #282c34;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Evita el scroll dentro del contenedor del tablero */
+}
+
+.matrix-row {
+  display: flex;
+}
+
+.matrix-cell {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #7ea109;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0px;
+}

@@ -13,13 +13,15 @@ const PlayGame = () => {
 
   return (
     <div className="play-game-container">
-      <div className="info-container">
-        <h1>Game Code: {code}</h1>
-        <h2>Number of Players: {numPlayers/10}</h2>
-        <h2>Username: {username}</h2>
-      </div>
       <div className="board-container">
-        <Board gameId={numPlayers} snakeColor={snakeColor} username={username} />
+        <Board
+          gameId={numPlayers}
+          snakeColor={snakeColor}
+          username={username}
+          code={code}
+          numPlayers={numPlayers}
+          username={username}
+        />
       </div>
     </div>
   );

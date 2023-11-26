@@ -1,15 +1,3 @@
-/* PlayGame.css */
-.play-game-container {
-  display: flex;
-  height: 100vh; /* Ajusta la altura al 100% del viewport */
-  overflow: hidden; /* Evita el scroll en el contenedor principal */
-}
-
-.info-container {
-  padding: 20px;
-  background-color: #f0f0f0;
-}
-
 .board-container {
   flex: 1;
   background-color: #282c34;

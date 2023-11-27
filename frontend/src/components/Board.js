@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import './Board.css';
 import { randomInt } from './utils';
+
+
 import {io} from 'socket.io-client';
 import { FaRegClock } from 'react-icons/fa'; 
 import Winner from './Winner';
@@ -8,10 +10,12 @@ import Winner from './Winner';
 //https://2579-201-197-80-5.ngrok-free.app/
 //http://localhost:3005
 
-const socket = io('http://localhost:3005');
+const socket = io('https://minority-hairy-fort-textbooks.trycloudflare.com');
 
 const Board = ({ gameId, snakeColor, username, code, numPlayers, tipo, tipo2:propTipo2 }) => {
     const [gameOver, setGameOver] = useState(false);
+
+    const [save, setSave] = useState(false);
     const [winner, setWinner] = useState('');
 
     const [tipo2, setTipo2] = useState(propTipo2);
@@ -71,8 +75,14 @@ const Board = ({ gameId, snakeColor, username, code, numPlayers, tipo, tipo2:pro
       socket.on('message', (data) => {
 
           if(data.juegoFinalizado) {
-            console.log("Finalizado. el ganador es: ", data.winner);
             handleGameOver(data.winner);
+
+            if (save == false) {
+              console.log(save);
+              sendData(data.players);
+              // Actualizar save
+              setSave(true);
+            }
           }
           const players_ = data.players;
           setPlayers(players_);
@@ -116,8 +126,9 @@ const Board = ({ gameId, snakeColor, username, code, numPlayers, tipo, tipo2:pro
         socket.off('connect');
         socket.off('message');
         socket.off('matrix');
+        socket.off('guardarLista');
     }
-    }, [food]);
+    }, [food, save]);
     //funcion para enviar la matrix al servidor
     const sendMatrix = (head, tail) => {
       socket.emit('message', {
@@ -130,6 +141,10 @@ const Board = ({ gameId, snakeColor, username, code, numPlayers, tipo, tipo2:pro
           size: tipo2
       });
     }
+
+    const sendData = (lista) => {
+      socket.emit('guardarLista', lista);
+    };
 
     //send size
     const sendSize = () => {

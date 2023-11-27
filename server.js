@@ -1,4 +1,5 @@
 const http = require('http');
+const fs = require('fs'); 
 const PORT = process.env.PORT || 3005;
 
 const server = http.createServer((req, res) => {
@@ -90,6 +91,13 @@ io.on('connection', (socket) => {
         size = data.size;
         matrix = crearMatriz(data.size);
     });
+
+    //recibe la instruccion de almacenar la partida.
+    socket.on('guardarLista', (nuevaLista) => {
+      // Puedes manejar la nueva lista como lo desees, por ejemplo, guardándola en un archivo JSON
+      guardarListaEnJSON(nuevaLista);
+      console.log('Lista guardada mediante el evento "guardarLista".');
+    });
     
 });
 //se encarga de crear una matriz nxn.
@@ -157,6 +165,38 @@ function verificarEstado(n) {
   return 0;
 }
 
+
+function guardarListaEnJSON(lista) {
+  let contenidoActual;
+
+  try {
+    contenidoActual = fs.readFileSync('historial.json', 'utf8');
+  } catch (error) {
+    console.error('Error al leer el archivo JSON:', error);
+    contenidoActual = '[]'; 
+  }
+
+  let listaExistente;
+  try {
+    listaExistente = JSON.parse(contenidoActual);
+  } catch (error) {
+    console.error('Error al analizar el contenido JSON existente:', error);
+    listaExistente = [];
+  }
+
+  listaExistente = listaExistente.concat(lista);
+
+  const jsonString = JSON.stringify(listaExistente);
+
+
+  fs.writeFile('historial.json', jsonString, 'utf8', (err) => {
+    if (err) {
+      console.error('Error al guardar la lista en el archivo JSON:', err);
+    } else {
+      console.log('Lista agregada al archivo JSON correctamente.');
+    }
+  });
+}
   
 server.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);

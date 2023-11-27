@@ -12,17 +12,21 @@ const GameScreen = () => {
   const [selectionLocked, setSelectionLocked] = useState(false);
   const colors = ['#572364', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#a52a2a'];
   const navigate = useNavigate();
+
   useEffect(() => {
     let timer = null;
 
     if (countdown > 0) {
       timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+    } else {
+      // Cuando el cronómetro llega a 0:00, redirigir a la pantalla de inicio
+      navigate('/');
     }
 
     return () => {
       clearTimeout(timer);
     };
-  }, [countdown]);
+  }, [countdown, navigate]);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -47,7 +51,6 @@ const GameScreen = () => {
     // Redirigir a la pantalla de juego
     navigate(`/play/${gameCode}/${numPlayers}/${cleanedColor}/${username}/${tipo}/${tipo2}`);
   };
-
 
   return (
     <div className="game-screen-container">

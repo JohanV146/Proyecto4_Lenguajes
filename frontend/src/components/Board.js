@@ -286,10 +286,17 @@ const Board = ({ gameId, snakeColor, username, code, numPlayers, tipo, tipo2:pro
               <div className="info-container">
                 <h1>Codigo de partida: {code}</h1>
                 <h2>Jugadores: {numPlayers / 10}</h2>
-                <div className="countdown-container">
-                  <FaRegClock size={30} />
-                  <span>{formatTime(time)}</span>
-                </div>
+                {tipo === '0' ? (
+                  <div className="countdown-container">
+                    <FaRegClock size={30} />
+                    <span>{formatTime(time)}</span>
+                  </div>
+                ) : (
+                  <div>
+                    <label>Largo</label>
+                    <p>{tipo2}</p>
+                  </div>
+                )}
                 <h2>Username: {username}</h2>
                 {players.map((player, index) => (
                   <h2 key={index} style={{ backgroundColor: `#${player[1]}`, color: 'white' }}>

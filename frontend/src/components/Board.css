@@ -48,3 +48,15 @@ button:hover {
   justify-content: center;
   margin: 0px;
 }
+
+.countdown-timer {
+  font-size: 40px; /* Ajustar el tamaño del cronómetro */
+}
+
+.length-label {
+  font-size: 40px; /* Ajustar el tamaño de la etiqueta "Largo" */
+}
+
+.length-value {
+  font-size: 40px; /* Ajustar el tamaño del valor del "Largo" */
+}

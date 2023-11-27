@@ -1,0 +1,29 @@
+.Winner {
+  text-align: center;
+}
+
+.ganador-screen {
+  background-color: #4CAF50;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px;
+}
+
+.ganador-label {
+  font-size: 2em;
+}
+
+.jugador-nombre,
+.tipo-label {
+  margin: 10px 0;
+}
+
+.boton-ir-a-inicio {
+  background-color: red; /* Puedes ajustar el color según tus preferencias */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px; /* Redondear los bordes */
+  cursor: pointer;
+}

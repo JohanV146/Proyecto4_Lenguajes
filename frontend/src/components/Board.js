@@ -2,17 +2,19 @@ import React, { useEffect, useState, useCallback } from 'react';
 import './Board.css';
 import { randomInt } from './utils';
 import {io} from 'socket.io-client';
-import Modal from './Modal'; 
+import { FaRegClock } from 'react-icons/fa'; 
+import Winner from './Winner';
 
 //https://2579-201-197-80-5.ngrok-free.app/
 //http://localhost:3005
 
-const socket = io('https://unsubscribe-ken-logs-delivered.trycloudflare.com');
+const socket = io('http://localhost:3005');
 
-
-const Board = ({ gameId, snakeColor, username, code, numPlayers, tipo, tipo2 }) => {
+const Board = ({ gameId, snakeColor, username, code, numPlayers, tipo, tipo2:propTipo2 }) => {
     const [gameOver, setGameOver] = useState(false);
     const [winner, setWinner] = useState('');
+
+    const [tipo2, setTipo2] = useState(propTipo2);
 
     const [players, setPlayers] = useState([]);
     const [isConnected, setIsConnected] = useState(false);
@@ -28,6 +30,39 @@ const Board = ({ gameId, snakeColor, username, code, numPlayers, tipo, tipo2 }) 
     const [tail, setTail] = useState([]);
 
     const [flagActivated, setFlagActivated] = useState(false);
+
+    const [time, setTime] = useState(tipo2);
+
+    useEffect(() => {
+    // Only set up the timer if tipo is '0'
+      if (tipo === '0') {
+          const timerInterval = setInterval(() => {
+          setTime((prevTime) => {
+              const newTime = prevTime - 1;
+              if (newTime === 0 && tipo === '0') {
+              clearInterval(timerInterval);
+              setTipo2(0);
+              }
+              return newTime;
+          });
+          }, 1000);
+
+          return () => {
+          clearInterval(timerInterval);
+          };
+      }
+    }, [tipo, tipo2]);
+
+    const formatTime = (seconds) => {
+      if (tipo === '0') {
+        const minutes = Math.max(Math.floor(seconds / 60), 0); // Asegúrate de que los minutos no sean negativos
+        const remainingSeconds = Math.max(seconds % 60, 0); // Asegúrate de que los segundos no sean negativos
+        return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+      } else {
+        return '0:00';
+      }
+    };
+
 
     //Conexcion de los sockets
     useEffect(() => {
@@ -244,35 +279,45 @@ const Board = ({ gameId, snakeColor, username, code, numPlayers, tipo, tipo2 }) 
 
     return (
       <div className="board-container">
-        <div className="info-container">
-          <h1>Codigo de partida: {code}</h1>
-          <h2>Jugadores: {numPlayers / 10}</h2>
-          <h2>Username: {username}</h2>
-          {players.map((player, index) => (
-            <h2 key={index} style={{ backgroundColor: `#${player[1]}`, color: 'white' }}>
-            {player[0]} puntaje: {player[2]}
-            </h2>
-          ))}
-          {flagActivated ? (
-            <p></p>
-          ) : (
-            <button onClick={handleStartClick}>Iniciar</button>
-          )}
-        </div>
-        <div className="matrix-container">
-          {matrix.map((row, rowIndex) => (
-            <div key={rowIndex} className="matrix-row">
-              {row.map((cell, colIndex) => (
-                <div
-                  key={colIndex}
-                  className="matrix-cell"
-                  style={{ backgroundColor: cell.color }}
-                >
+        {gameOver ? (
+          <Winner tipo={tipo} nombreJugador={winner} tipo2={tipo2} />
+        ) : (
+          <>
+              <div className="info-container">
+                <h1>Codigo de partida: {code}</h1>
+                <h2>Jugadores: {numPlayers / 10}</h2>
+                <div className="countdown-container">
+                  <FaRegClock size={30} />
+                  <span>{formatTime(time)}</span>
                 </div>
-              ))}
-            </div>
-          ))}
-        </div>
+                <h2>Username: {username}</h2>
+                {players.map((player, index) => (
+                  <h2 key={index} style={{ backgroundColor: `#${player[1]}`, color: 'white' }}>
+                  {player[0]} puntaje: {player[2]}
+                  </h2>
+                ))}
+                {flagActivated ? (
+                 <p></p>
+                ) : (
+                  <button onClick={handleStartClick}>Iniciar</button>
+                )}
+              </div>
+              <div className="matrix-container">
+                {matrix.map((row, rowIndex) => (
+                  <div key={rowIndex} className="matrix-row">
+                    {row.map((cell, colIndex) => (
+                      <div
+                        key={colIndex}
+                        className="matrix-cell"
+                        style={{ backgroundColor: cell.color }}
+                      >
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </>
+        )}
       </div>
     );
 };
